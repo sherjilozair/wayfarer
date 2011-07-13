@@ -54,7 +54,7 @@
 	    }
 	    function usedata(obj){
 	        // Use it in the HTML
-	    if (obj.status == "OVER_QUERY_LIMIT"){
+	    if (obj.status === "OVER_QUERY_LIMIT"){
 	        $('#output table').html('<tr><th>Oops! Server overloaded. Please try again later.</th></tr>');
 	    }
 	    else{
@@ -65,14 +65,17 @@
 	    
 	        var destrow = '<tr><th>Distance</th>';
             for (i = 0; i < obj.destination_addresses.length; i++){
-                destrow += "<th>" + obj.destination_addresses[i].split(",")[0] + "</th>";
+                destrow += "<th>" + obj.destination_addresses[i].split(",")[0];
+
+                destrow += "<div class='small'> <p>" + obj.destination_addresses[i].split(",")[1] + "</p></div></th>";
             }
             destrow += "</tr>";
             var html = "";
             html += destrow;
             for(i = 0; i < obj.rows.length; i++){
                 html += "<tr>";
-                html += "<th>" + obj.origin_addresses[i].split(",")[0] + "</th>";
+                html += "<th>" + obj.origin_addresses[i].split(",")[0];
+                html +="<div class='small'><p>" + obj.origin_addresses[i].split(",")[1] + "</p></div></th>";
                 for (j = 0; j < obj.rows[i].elements.length; j++){
                     if (obj.rows[i].elements[j].distance){
                     html += "<td>" + obj.rows[i].elements[j].distance.text + "</td>";}

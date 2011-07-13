@@ -1,6 +1,6 @@
 td, th { border-radius: 3px; text-align: center; padding: 7px;}
 
-th{ background: #C0C0C0; color: red; font-weight: normal;;}
+th{ background: #36BBCE; color: #015965; font-weight: normal;;}
 
 #output{
     position: fixed;
@@ -10,9 +10,12 @@ th{ background: #C0C0C0; color: red; font-weight: normal;;}
 }
 
 #textandbutton{
+    width: 80%;
+    margin:auto;
+    text-align: center;
     position: fixed;
-    top: 10%;
-    left: 40%;
+    top: 12%;
+    left: 8%;
 }
 
 td.hover, tr.hover{
@@ -20,11 +23,24 @@ td.hover, tr.hover{
 }
 
 body{
-    color: #C0C0C0;
+    color: #015965;
     font: 100% Verdana, sans-serif;
+    font: 120% 'Jura', sans-serif;
 }
 
 table{
     width: 100%;
     margin: auto;
+}
+
+.small p{
+    margin: 0px;
+    padding: 0px;
+    font-size: 75%;
+    font-style: italic;
+}
+
+#textandbutton input, #textandbutton label{
+    height:25px;
+    font-size:12pt;
 }
