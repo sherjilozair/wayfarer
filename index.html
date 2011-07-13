@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<LINK REL=StyleSheet HREF="style.css" TYPE="text/css" MEDIA=screen>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="jquery.tablehover.js"></script>
+	<title> Wayfarer </title>
+	<script>
+	    var cities = new Array();
+	    var x = 0;
+	    $(document).ready(function(){
+            
+            // JQuery Setup code
+
+            $('#table1').tableHover({colClass: 'hover'}); 
+            
+        });
+        
+	    function updatearr(){
+	        var tmp = document.getElementById('cities').value;
+	        if (tmp != ""){
+	            cities[x++] = tmp;
+	        }
+	        
+	        document.getElementById('cities').value = "";
+	        
+	    }
+	    function queryG(){
+	        var url = "http://maps.googleapis.com/maps/api/distancematrix/json?";	        
+	        
+	        var c = cities[0];
+	        for (i = 1; i < cities.length; i++){
+	            c += "|" + cities[i];
+	        }
+	        
+            c = c.replace(" ", "+");
+            
+            //alert( c );
+            
+            url += "origins=" + c + "&";
+            url += "destinations=" + c;
+            url += "&mode=driving";
+            url += "&language=en-EN";
+            url += "&sensor=false";
+            
+            $.post("proxy.php", { url: url },
+               function(data) {
+                   //alert(data);
+                   usedata(JSON.parse(data));
+               });
+	    }
+	    function usedata(obj){
+	        // Use it in the HTML
+	    $('#output table').html("");
+        var destrow = '<tr><td>Distance Matrix</td>';
+        for (i = 0; i < obj.destination_addresses.length; i++){
+            destrow += "<td>" + obj.destination_addresses[i].split(",")[0] + "</td>";
+        }
+        destrow += "</tr>";
+        var html = "";
+        html += destrow;
+        for(i = 0; i < obj.rows.length; i++){
+            html += "<tr>";
+            html += "<td>" + obj.origin_addresses[i].split(",")[0] + "</td>";
+            for (j = 0; j < obj.rows[i].elements.length; j++){
+                if (obj.rows[i].elements[j].distance){
+                html += "<td>" + obj.rows[i].elements[j].distance.text + "</td>";}
+                else{
+                    html += "<td> na </td>";
+                }
+            }
+            html += "</tr>";
+            
+        }
+        $('#output table').html(html);
+        //$('#output table').append(destrow);        
+        }
+	</script>
+</head>
+
+<body>
+    <div id='textandbutton' class='input'>
+        <form onsubmit='updatemat()'>
+            <label for='cities'> Add cities: </label><input id='cities' name='cities' type='text'>
+            <input value='update' name='update' type='button' onClick='updatearr(); queryG();'>
+            </form>
+    </div>
+    <div id='output'>
+        <table id='table1'>
+            
+        </table>
+    </div>
+
+</body>
+</html>

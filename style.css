@@ -1,0 +1,18 @@
+table { border-collapse: collapse; }
+td, th { border: 1px #ccc solid; text-align: center;}
+
+#output{
+    position: fixed;
+    left: 30%;
+    top: 20%;
+}
+
+#textandbutton{
+    position: fixed;
+    top: 80%;
+    left: 40%;
+}
+
+td.hover, tr.hover{
+    background: blue;
+}
