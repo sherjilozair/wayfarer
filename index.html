@@ -17,10 +17,12 @@
         
 	    function updatearr(){
 	        var tmp = document.getElementById('cities').value;
-	        if (tmp != ""){
-	            cities[x++] = tmp;
-	        }
-	        
+	        var cityarr = tmp.split(",");
+	        for (i = 0; i < cityarr.length; i++){
+	            if (cityarr[i] != ""){
+	                cities[x++] = cityarr[i];
+	            }
+            }   
 	        document.getElementById('cities').value = "";
 	        
 	    }
