@@ -52,12 +52,16 @@
 	    }
 	    function usedata(obj){
 	        // Use it in the HTML
+	    if (obj.status == "OVER_QUERY_LIMIT"){
+	        $('#output table').html('<tr><th>Oops! Server overloaded. Please try again later.</th></tr>');
+	    }
+	    else{
 	    $('#output table').fadeOut( function(){
 	        $('#output table').html("");
 	        
 	    
 	    
-	        var destrow = '<tr><th>Distance Matrix</th>';
+	        var destrow = '<tr><th>Distance</th>';
             for (i = 0; i < obj.destination_addresses.length; i++){
                 destrow += "<th>" + obj.destination_addresses[i].split(",")[0] + "</th>";
             }
@@ -81,8 +85,8 @@
             // TODO position
             $('#output table').fadeIn();
 	    });
-	           
-        }
+	    }  
+    }
 	</script>
 </head>
 
