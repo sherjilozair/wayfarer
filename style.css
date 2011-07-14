@@ -3,18 +3,18 @@ td, th{ border-radius: 5px; text-align: center; padding: 3px;}
 th{ background: #36BBCE; color: #015965; font-weight: normal;;}
 
 #output{
-    position: absolute;
+    position: relative;
     left: 5%;
-    top: 20%;
+    top: 10px;
     width: 90%;
 }
 
 #textandbutton{
     margin:auto;
     text-align: center;
-    position: fixed;
+    position: relative;
     width: 100%;
-    top: 3%;
+    top: 10px;
     }
 
 tr:hover{
@@ -30,6 +30,8 @@ table{
     width: 100%;
     margin: auto;
     padding-bottom: 10px;
+    position: relative;
+    z-index:-10;
 }
 
 .small p{
@@ -42,19 +44,26 @@ table{
 #textandbutton input{
     height:30px;
     width: 350px;
-    font-size:14pt;
+    font-size:12pt;
     margin-top: 10px;
     border-radius: 3px;
     font-style: italic;
     opacity: 0.4;
-    
+    text-align: center;
+    color: red;
+    position: relative;
+    z-index: 10;
 }
 #textandbutton label{
     height:30px;
-    font-size:16pt;
+    font-size:20pt;
+    position: relative;
+    z-index: 7;
 }
 #message{
     padding: 5px;
+    position: relative;
+    z-index: 9;
 }
 
 #footer{
@@ -62,5 +71,12 @@ table{
     text-align: center;
     opacity: 1;
     position: relative;
+    
+}
+
+#google{
+    position: fixed;
+    bottom: 5px;
+    right: 5px; 
     
 }
