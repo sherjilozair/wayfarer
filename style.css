@@ -45,6 +45,8 @@ table{
     font-size:14pt;
     margin-top: 10px;
     border-radius: 3px;
+    font-style: italic;
+    opacity: 0.4;
     
 }
 #textandbutton label{

@@ -14,6 +14,22 @@
     <title> WayFarer: Road Distances</title>
 	<script>
 
+        $(document).ready(function(){
+            $('#textandbutton input').blur(function(){
+                $('#textandbutton input').css({
+                    opacity: 0.4,
+                    'font-style': 'italic'
+                });
+            });
+            $('#textandbutton input').focus(function(){
+                $('#textandbutton input').css({
+                    opacity: 0.8,
+                    'font-style': 'normal'
+                });
+            });
+        });
+
+
 	    var inputs = new Array();
         var x = 0;
         
@@ -24,7 +40,8 @@
                 inputs[x++] = inp;
             }
             
-            document.getElementById('input').value = "";
+            $("#textandbutton input").blur();
+            
             
             var cities = inputs[0].replace(/,/g,"|").replace(/ /g, "+");
             
@@ -160,7 +177,10 @@
             </div>
             <input id='input' 
                    name='input' 
-                   type='text' 
+                   type='text'
+                   value='Enter cities...'
+                   onfocus="{this.value='';}"
+                   onblur="{this.value='Enter cities...'}" 
                    onkeypress='if (event.keyCode==13){fare();}'>
                    <p id='footer'>handcoded by sherjil ozair</p>
     </div>
