@@ -1,4 +1,4 @@
-td, th { border-radius: 5px; text-align: center; padding: 3px;}
+td, th{ border-radius: 5px; text-align: center; padding: 3px;}
 
 th{ background: #36BBCE; color: #015965; font-weight: normal;;}
 
@@ -17,13 +17,13 @@ th{ background: #36BBCE; color: #015965; font-weight: normal;;}
     top: 3%;
     }
 
-td.hover, tr.hover{
-    background: blue;
+tr:hover{
+    background: #C0C0C0;
 }
 
 body{
     color: #015965;
-    font-family: 100% Comic Sans MS, Arial, "MS Trebuchet", sans-serif;
+    font-family: Comic Sans MS, Arial, "MS Trebuchet", sans-serif;
 }
 
 table{
