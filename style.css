@@ -23,7 +23,7 @@ td.hover, tr.hover{
 
 body{
     color: #015965;
-    font: 100% Comic Sans MS, monaco, sans-serif;
+    font-family: 100% Comic Sans MS, Arial, "MS Trebuchet", sans-serif;
 }
 
 table{
@@ -50,7 +50,6 @@ table{
 #textandbutton label{
     height:30px;
     font-size:16pt;
-    font-family: Comic Sans MS, Arial, "MS Trebuchet", sans-serif;
 }
 #message{
     padding: 5px;
