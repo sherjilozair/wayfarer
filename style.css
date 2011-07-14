@@ -3,7 +3,7 @@ td, th { border-radius: 3px; text-align: center; padding: 7px;}
 th{ background: #36BBCE; color: #015965; font-weight: normal;;}
 
 #output{
-    position: fixed;
+    position: absolute;
     left: 10%;
     top: 20%;
     width: 80%;
@@ -13,7 +13,7 @@ th{ background: #36BBCE; color: #015965; font-weight: normal;;}
     width: 80%;
     margin:auto;
     text-align: center;
-    position: fixed;
+    position: absolute;
     top: 12%;
     left: 8%;
 }
@@ -40,6 +40,12 @@ table{
 }
 
 #textandbutton input, #textandbutton label{
-    height:25px;
+    height:30px;
     font-size:12pt;
+}
+
+#message{
+    height:30px;
+    font-size:15pt;
+    display: inline;
 }

@@ -13,18 +13,18 @@
 	    var cities = new Array();
 	    var x = 0;
 	    $(document).ready(function(){
-            
+            $('#message').fadeOut(0);
             // JQuery Setup code            
         });
         
 	    function updatearr(){
 	        var tmp = document.getElementById('cities').value;
-	        var cityarr = tmp.split(",");
-	        for (i = 0; i < cityarr.length; i++){
-	            if (cityarr[i] != ""){
-	                cities[x++] = cityarr[i];
+	        //var cityarr = tmp.split(",");
+	        //for (i = 0; i < cityarr.length; i++){
+	            if (tmp != ""){
+	                cities[x++] = tmp.replace(" ", "+");
 	            }
-            }   
+            //}   
 	        document.getElementById('cities').value = "";
 	        
 	    }
@@ -36,7 +36,7 @@
 	            c += "|" + cities[i];
 	        }
 	        
-            c = c.replace(" ", "+");
+            //c = c.replace(" ", "+");
             
             //alert( c );
             
@@ -45,17 +45,28 @@
             url += "&mode=driving";
             url += "&language=en-EN";
             url += "&sensor=false";
-            
+            //alert(url);
             $.post("proxy.php", { url: url },
                function(data) {
                    //alert(data);
+                   
                    usedata(JSON.parse(data));
                });
 	    }
 	    function usedata(obj){
 	        // Use it in the HTML
-	    if (obj.status === "OVER_QUERY_LIMIT"){
-	        $('#output table').html('<tr><th>Oops! Server overloaded. Please try again later.</th></tr>');
+	    if (!check_status(obj)){
+	        if (obj.status != "OK"){
+	            // Big Error
+	        }
+	        else{
+	            // Small Error (Move on)
+	            cities.splice(cities.length - 1, 1);
+	            x--;
+	            $('#message').fadeIn(500, function(){
+                    $('#message').fadeOut(1000);
+                });
+	        }
 	    }
 	    else{
 	    $('#output table').fadeOut( function(){
@@ -66,8 +77,8 @@
 	        var destrow = '<tr><th>Distance</th>';
             for (i = 0; i < obj.destination_addresses.length; i++){
                 destrow += "<th>" + obj.destination_addresses[i].split(",")[0];
-
-                destrow += "<div class='small'> <p>" + obj.destination_addresses[i].split(",")[1] + "</p></div></th>";
+                if(obj.destination_addresses[i].split(",")[1]){
+                destrow += "<div class='small'> <p>" + obj.destination_addresses[i].split(",")[1] + "</p></div></th>";}
             }
             destrow += "</tr>";
             var html = "";
@@ -75,12 +86,14 @@
             for(i = 0; i < obj.rows.length; i++){
                 html += "<tr>";
                 html += "<th>" + obj.origin_addresses[i].split(",")[0];
-                html +="<div class='small'><p>" + obj.origin_addresses[i].split(",")[1] + "</p></div></th>";
+                if(obj.origin_addresses[i].split(",")[1]){html +="<div class='small'><p>" + obj.origin_addresses[i].split(",")[1] + "</p></div></th>";}
                 for (j = 0; j < obj.rows[i].elements.length; j++){
-                    if (obj.rows[i].elements[j].distance){
-                    html += "<td>" + obj.rows[i].elements[j].distance.text + "</td>";}
+                    if (obj.rows[i].elements[j].distance.text != "1 m" && i > j){
+
+                    html += "<td>" + obj.rows[i].elements[j].distance.text + "</td>";
+                    }
                     else{
-                        html += "<td> na </td>";
+                        html += "<td> - </td>";
                     }
                 }
                 html += "</tr>";
@@ -92,14 +105,29 @@
 	    });
 	    }  
     }
+    
+    function check_status(obj){
+        if (obj.status=="OK"){
+            for (i = 0; i < obj.rows.length; i++){
+                for (j = 0; j < obj.rows[i].elements.length; j++){
+                    if (obj.rows[i].elements[j].status != "OK"){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 	</script>
 </head>
 
 <body>
     <div id='textandbutton' class='input'>
         
-            <label for='cities'> Wayfarer: </label><input id='cities' name='cities' type='text' onkeypress='if (event.keyCode==13){updatearr(); queryG();}'>
-            
+            <label for='cities'> Wayfarer: </label><input id='cities' name='cities' type='text' onkeypress='if (event.keyCode==13){updatearr(); queryG();}'><pre id='message'>  Bad Input !</pre>
     </div>
     <div id='output'>
         <table id='table1'>
