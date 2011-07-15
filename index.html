@@ -35,6 +35,7 @@
         var x = 0;
         
         function fare(){
+            fare2();
             showMsg("Compiling...");
             var inp = document.getElementById('input').value;
             if (inp != ""){
@@ -198,40 +199,98 @@
     <script type="text/javascript"> 
 
     	var geocoder, location1, location2, gDir;
-
+        var distancekms;
     	function initialize() {
     		geocoder = new GClientGeocoder();
     		gDir = new GDirections();
+    		/*
+    		
     		GEvent.addListener(gDir, "load", function() {
     			var drivingDistanceMiles = gDir.getDistance().meters / 1609.344;
     			var drivingDistanceKilometers = gDir.getDistance().meters / 1000;
-    			document.getElementById('results').innerHTML = '<strong>Address 1: </strong>' + location1.address + ' (' + location1.lat + ':' + location1.lon + ')<br /><strong>Address 2: </strong>' + location2.address + ' (' + location2.lat + ':' + location2.lon + ')<br /><strong>Driving Distance: </strong>' + drivingDistanceMiles + ' miles (or ' + drivingDistanceKilometers + ' kilometers)';
+    			distancekms = drivingDistanceKilometers;
+    			//document.getElementById('results').innerHTML = '<strong>Address 1: </strong>' + location1.address + ' (' + location1.lat + ':' + location1.lon + ')<br /><strong>Address 2: </strong>' + location2.address + ' (' + location2.lat + ':' + location2.lon + ')<br /><strong>Driving Distance: </strong>' + drivingDistanceMiles + ' miles (or ' + drivingDistanceKilometers + ' kilometers)';
     		});
+    		
+    		*/
     	}
+    	
+    	
+    	
+    	function start(locations){
+    	    var coded_locations = new Array();
+    	    function getLocation(n){
+    	        if (n == locations.length){
+    	            //console.log(coded_locations);
+                    for (i = 0; i < coded_locations.length; i++){
+            	        if (!coded_locations[i] || coded_locations[i].Status.code != 200){
+            	            // Show Bad Input Error
+            	            break;
+            	        }
+            	    }
+            	    
+            	    getDirections(coded_locations);
+    	            
+    	            }
+                geocoder.getLocations(locations[n], function (response){
+                    coded_locations[n] = response;
+                    getLocation(n + 1);
+                });
+        	}
+        	getLocation(0);
+    	}
+    	function getDirections(locations){
+    	    
+    	    var mat = new Array();
+    	    mat[0] = new Array();
+    	    function getDirection(i, j){
+    	        console.log(i, j);
+    	        if (i == locations.length){
+    	            console.log(mat);
+    	            return;
+    	            // work finished
+    	        }
+    	        else if (j == 0){
+    	            mat[i] = new Array();
+    	        }
+    	        if (j == i){
+    	            getDirection(i + 1, 0);
+    	        }
+    	        else{
+    	        gDir = new GDirections();
+    	        gDir.load('from: ' + locations[i].Placemark[0].address + ' to: ' + locations[j].Placemark[0].address);
+                mat[i][j] = gDir.getDistance();
+                pausecomp(10000);
+                console.log(gDir.getStatus());
+    	        getDirection(i, j + 1);
+	        }
+    	    }
+    	    getDirection(0, 0);
+    	}
+    	
+    	/*
+    	gDir = new GDirections();
+        gDir.load('from: ' + locations[i].Placemark[0].address + ' to: ' + locations[j].Placemark[0].address, {locale: "en_US"});
+        mat[i][j] = gDir.getDistance();
+    	*/
+    	function displayDistances(distances){
+    	    
+    	}
+    	
+    	function pausecomp(millis) 
+        {
+        var date = new Date();
+        var curDate = null;
 
-    	function showLocation() {
-    		geocoder.getLocations(document.forms[0].address1.value, function (response) {
-    			if (!response || response.Status.code != 200)
-    			{
-    				alert("Sorry, we were unable to geocode the first address");
-    			}
-    			else
-    			{
-    				location1 = {lat: response.Placemark[0].Point.coordinates[1], lon: response.Placemark[0].Point.coordinates[0], address: response.Placemark[0].address};
-    				geocoder.getLocations(document.forms[0].address2.value, function (response) {
-    					if (!response || response.Status.code != 200)
-    					{
-    						alert("Sorry, we were unable to geocode the second address");
-    					}
-    					else
-    					{
-    						location2 = {lat: response.Placemark[0].Point.coordinates[1], lon: response.Placemark[0].Point.coordinates[0], address: response.Placemark[0].address};
-    						gDir.load('from: ' + location1.address + ' to: ' + location2.address);
-    					}
-    				});
-    			}
-    		});
+        do { curDate = new Date(); } 
+        while(curDate-date < millis);
+        }
+    	
+    	function fare2(){
+    	    var inp = document.getElementById('input').value.split(",");
+    	    start(inp);
     	}
+    	
 
     	</script>
 </head>
