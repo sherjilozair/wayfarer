@@ -11,7 +11,7 @@
 	<LINK REL=StyleSheet HREF="style.css" TYPE="text/css" MEDIA=screen>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     
-    <script src="http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAcO6DnvDEfsVaj7lwILpWaRSU6rQbOMsW-YArM2tOWZkTTbEaKBTaBudxVlwuYVN9XhahZo21nMWBpw" type="text/javascript"></script> 
+    <script src="http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAcO6DnvDEfsVaj7lwILpWaRT2yXp_ZAY8_ufC3CFXhHIE1NvwkxTGYanHS6BcNkiXsbMQpRm_t3tMmQ" type="text/javascript"></script> 
     <title> WayFarer: Road Distances</title>
 	<script>
 
@@ -35,14 +35,14 @@
         var x = 0;
         
         function fare(){
-            fare2();
+            //fare2();
             showMsg("Compiling...");
             var inp = document.getElementById('input').value;
             if (inp != ""){
                 inputs[x++] = inp;
             }
             
-            document.getElementById('input').value = "";
+            //document.getElementById('input').value = "";
             
             
             var cities = inputs[0].replace(/,/g,"|").replace(/ /g, "+");
@@ -68,8 +68,10 @@
         
         function useJSON(json){
             var errstr = error(json);
-            if (errstr == "BIGERROR"){
-                showMsg("Server Busy !");
+            var ALT = true;
+            if (ALT || errstr == "BIGERROR"){
+                //showMsg("Server Busy !");
+                fare2();
             }
             else if(errstr == "BADINPUT"){
                 inputs.splice(inputs.length - 1, 1);
@@ -164,7 +166,7 @@
                         $('#message').html("WayFarer");
                         $('#message').fadeIn(400);
                     });
-                }).delay(1500);
+                }).delay(2000);
             });
         }
 	</script>
@@ -198,21 +200,27 @@
     
     <script type="text/javascript"> 
 
-    	var geocoder, location1, location2, gDir;
-        var distancekms;
+    	var geocoder, gDir, SUCCESS;
+    	var I, J;
+        var mat = new Array();
     	function initialize() {
     		geocoder = new GClientGeocoder();
     		gDir = new GDirections();
-    		/*
+    		
     		
     		GEvent.addListener(gDir, "load", function() {
-    			var drivingDistanceMiles = gDir.getDistance().meters / 1609.344;
-    			var drivingDistanceKilometers = gDir.getDistance().meters / 1000;
-    			distancekms = drivingDistanceKilometers;
-    			//document.getElementById('results').innerHTML = '<strong>Address 1: </strong>' + location1.address + ' (' + location1.lat + ':' + location1.lon + ')<br /><strong>Address 2: </strong>' + location2.address + ' (' + location2.lat + ':' + location2.lon + ')<br /><strong>Driving Distance: </strong>' + drivingDistanceMiles + ' miles (or ' + drivingDistanceKilometers + ' kilometers)';
+
+    			mat[I][J] = gDir.getDistance().html;
+    			getDirection(I, J + 1)
+    			
     		});
     		
-    		*/
+    		GEvent.addListener(gDir, "error", function() {
+    			getDirection(I, J + 1)
+    			
+    		});
+    		
+    		
     	}
     	
     	
@@ -221,16 +229,14 @@
     	    var coded_locations = new Array();
     	    function getLocation(n){
     	        if (n == locations.length){
-    	            //console.log(coded_locations);
-                    for (i = 0; i < coded_locations.length; i++){
+    	            for (i = 0; i < coded_locations.length; i++){
             	        if (!coded_locations[i] || coded_locations[i].Status.code != 200){
-            	            // Show Bad Input Error
+            	            showMsg("Bad Input !");
             	            break;
             	        }
             	    }
-            	    
             	    getDirections(coded_locations);
-    	            
+            	    
     	            }
                 geocoder.getLocations(locations[n], function (response){
                     coded_locations[n] = response;
@@ -239,57 +245,97 @@
         	}
         	getLocation(0);
     	}
-    	function getDirections(locations){
-    	    
-    	    var mat = new Array();
-    	    mat[0] = new Array();
-    	    function getDirection(i, j){
-    	        console.log(i, j);
-    	        if (i == locations.length){
-    	            console.log(mat);
-    	            return;
-    	            // work finished
-    	        }
-    	        else if (j == 0){
-    	            mat[i] = new Array();
-    	        }
-    	        if (j == i){
-    	            getDirection(i + 1, 0);
-    	        }
-    	        else{
-    	        gDir = new GDirections();
-    	        gDir.load('from: ' + locations[i].Placemark[0].address + ' to: ' + locations[j].Placemark[0].address);
-                mat[i][j] = gDir.getDistance();
-                pausecomp(10000);
-                console.log(gDir.getStatus());
-    	        getDirection(i, j + 1);
-	        }
-    	    }
+    	var locations;
+    	function getDirections(llocations){
+            locations = llocations;
     	    getDirection(0, 0);
-    	}
-    	
-    	/*
-    	gDir = new GDirections();
-        gDir.load('from: ' + locations[i].Placemark[0].address + ' to: ' + locations[j].Placemark[0].address, {locale: "en_US"});
-        mat[i][j] = gDir.getDistance();
-    	*/
-    	function displayDistances(distances){
     	    
     	}
     	
-    	function pausecomp(millis) 
-        {
-        var date = new Date();
-        var curDate = null;
-
-        do { curDate = new Date(); } 
-        while(curDate-date < millis);
+    	
+    	function getDirection(i, j){
+	        if (i == locations.length){
+	            
+	            SUCCESS = true;
+	            alternateDisplay();
+	            
+	            // work finished
+	        }
+	        if (j == 0){
+	            mat[i] = new Array();
+	        }
+	        if (j == i){
+	            getDirection(i + 1, 0);
+	        }
+	        else{
+	        I = i;
+            J = j;
+	        
+	        gDir.load('from: ' + locations[i].Placemark[0].address + ' to: ' + locations[j].Placemark[0].address);
+	        
         }
+	}
+
+    	function alternateDisplay(){
+    	    $('#output table').fadeOut( function(){
+    	        $('#output table').html("");
+	            var html = "<tr><th>Distances</th>";
+	            for (i = 0; i < locations.length; i++){
+                    var names = locations[i].Placemark[0].address.split(',');
+                    
+                    html += "<th>" + names[0];
+                    html += "<div class='small'><p>";
+                    if (names[1]){
+                        html += names[1];
+                    }
+                    if(names[2]){
+                        html += ", " + names[2];
+                    }
+                    html += "</p></div></th>"
+                }
+                html += "</tr>";
+                
+                for (i = 0; i < locations.length; i++){
+                    var names = locations[i].Placemark[0].address.split(",");
+                    html += "<tr><th>" + names[0];
+                    html += "<div class='small'><p>";
+                    if (names[1]){
+                        html += names[1];
+                    }
+                    if(names[2]){
+                        html += ", " + names[2];
+                    }
+                    html += "</p></div></th>"
+                    for (j = 0; j < locations.length; j++){
+                    if (mat[i][j]){
+                        var val = mat[i][j];
+                    }
+                    else{
+                        var val = "-";
+                    }
+                    if(val == "1 m"){
+                        val = "0";
+                        }
+                    if (i < j){
+                        val = "";
+                    }
+                    
+                    html += "<td>" + val + "</td>";
+                    
+                    }
+                    html += "</tr>";
+                }
+	            $('#output table').html(html);
+                $('#output table').fadeIn();
+	        });
+    	}
+    
     	
     	function fare2(){
     	    var inp = document.getElementById('input').value.split(",");
     	    start(inp);
-    	}
+    	    }
+    	
     	
 
     	</script>
@@ -306,8 +352,6 @@
                    name='input' 
                    type='text'
                    value=''
-                   onfocus="{this.value='';}"
-                   onblur="{this.value='Enter more cities...'}" 
                    onkeypress='if (event.keyCode==13){fare();}'>
                    <p id='footer'>handcoded by sherjil ozair.</p>
     </div>
