@@ -1,6 +1,6 @@
 td, th{ border-radius: 5px; text-align: center; padding: 3px;}
 
-th{ background: #36BBCE; color: #015965; font-weight: normal;;}
+th{ background: #36BBCE; color: #015965; font-weight: normal;}
 
 #output{
     position: relative;
@@ -17,13 +17,15 @@ th{ background: #36BBCE; color: #015965; font-weight: normal;;}
     top: 10px;
     }
 
-tr:hover{
-    background: #C0C0C0;
-}
-
 body{
     color: #015965;
-    font-family: Comic Sans MS, Arial, "MS Trebuchet", sans-serif;
+    font-family: "Comic Sans MS", Arial, "MS Trebuchet", sans-serif;
+    font-family: 'Redressed', cursive;
+    font-size: 125%;
+}
+
+tr:hover_commneted_out{
+    background: #C0C0C0;
 }
 
 table{
@@ -31,7 +33,6 @@ table{
     margin: auto;
     padding-bottom: 10px;
     position: relative;
-    z-index:-10;
 }
 
 .small p{
@@ -52,18 +53,17 @@ table{
     text-align: center;
     color: red;
     position: relative;
-    z-index: 10;
 }
+
 #textandbutton label{
     height:30px;
-    font-size:20pt;
+    font-size:25pt;
     position: relative;
-    z-index: 7;
+    font-family: 'Redressed', cursive;
 }
 #message{
     padding: 5px;
     position: relative;
-    z-index: 9;
 }
 
 #footer{
@@ -76,7 +76,20 @@ table{
 
 #google{
     position: fixed;
-    bottom: 5px;
-    right: 5px; 
+    bottom: 10px;
+    right: 10px; 
     
 }
+#g{
+    width: 50px;
+    z-index: 1;
+    position: absolute;
+    top: 75px;
+    left: 25px;
+}
+#facebook{
+    width: 80px;
+    z-index: 1;
+    position: absolute;
+    top: 75px;
+    right: 20px;}

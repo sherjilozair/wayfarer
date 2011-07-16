@@ -1,42 +1,42 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<!--Author: Sherjil Ozair -->
-<!--Contact: sherjilozair@gmail.com -->
-<!--Release: v0.1.3 (build no. 3)-->
+<!-- Author: Sherjil Ozair -->
+<!-- Contact: sherjilozair@gmail.com -->
+<!-- Release: v0.2.1 (build no. 14) -->
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<LINK REL=StyleSheet HREF="style.css" TYPE="text/css" MEDIA=screen>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-    
-    <script src="http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAcO6DnvDEfsVaj7lwILpWaRT2yXp_ZAY8_ufC3CFXhHIE1NvwkxTGYanHS6BcNkiXsbMQpRm_t3tMmQ" type="text/javascript"></script> 
-    <title> WayFarer: Road Distances</title>
+    <link href='http://fonts.googleapis.com/css?family=Redressed&v2' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    <script src="http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAcO6DnvDEfsVaj7lwILpWaRSU6rQbOMsW-YArM2tOWZkTTbEaKBTaBudxVlwuYVN9XhahZo21nMWBpw" type="text/javascript"></script> 
+    <title> Wayfarer v0.2: road distances</title>
 	<script>
 
         $(document).ready(function(){
             $('#textandbutton input').blur(function(){
-                $('#textandbutton input').css({
+                $(this).css({
                     opacity: 0.4,
                     'font-style': 'italic'
                 });
             });
             $('#textandbutton input').focus(function(){
-                $('#textandbutton input').css({
+                $(this).css({
                     opacity: 0.8,
                     'font-style': 'normal'
                 });
             });
+            
         });
 
-
+        var NAME = "Wayfarer v0.2";
 	    var inputs = new Array();
         var x = 0;
         
         function fare(){
-            //fare2();
-            showMsg("Compiling...");
             var inp = document.getElementById('input').value;
             if (inp != ""){
                 inputs[x++] = inp;
@@ -70,13 +70,12 @@
             var errstr = error(json);
             var ALT = true;
             if (ALT || errstr == "BIGERROR"){
-                //showMsg("Server Busy !");
                 fare2();
             }
             else if(errstr == "BADINPUT"){
                 inputs.splice(inputs.length - 1, 1);
                 x--;
-                showMsg("Bad Input !");
+                changeMsg("Bad Input !");
                 
             }
             else if(errstr == "OK"){
@@ -136,8 +135,16 @@
                         }
                         html += "</tr>";
                     }
+    	            
+    	            changeMsg(NAME);
+    	            
     	            $('#output table').html(html);
                     $('#output table').fadeIn();
+                    
+                    
+                    
+                    
+                    
     	        });
 	        }
         }
@@ -158,44 +165,15 @@
             }
         }
         
-        function showMsg(str){
+        function changeMsg(str){
             $('#message').fadeOut(400, function(){
                 $('#message').html(str);
-                $('#message').fadeIn(400, function(){
-                    $('#message').fadeOut(400, function(){
-                        $('#message').html("WayFarer");
-                        $('#message').fadeIn(400);
-                    });
-                }).delay(2000);
+                $('#message').fadeIn();
             });
         }
 	</script>
-	<script type="text/javascript">
 
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-2841380-3']);
-      _gaq.push(['_trackPageview']);
 
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-24545581-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
     
     
     <script type="text/javascript"> 
@@ -231,7 +209,8 @@
     	        if (n == locations.length){
     	            for (i = 0; i < coded_locations.length; i++){
             	        if (!coded_locations[i] || coded_locations[i].Status.code != 200){
-            	            showMsg("Bad Input !");
+            	            changeMsg("Bad Input !");
+            	            return
             	            break;
             	        }
             	    }
@@ -243,12 +222,16 @@
                     getLocation(n + 1);
                 });
         	}
+        	changeMsg("Taking out parchment and quill...");
         	getLocation(0);
     	}
+    	
+    	
     	var locations;
     	function getDirections(llocations){
             locations = llocations;
     	    getDirection(0, 0);
+    	    changeMsg("Figuring out the spell...");
     	    
     	}
     	
@@ -258,7 +241,7 @@
 	            
 	            SUCCESS = true;
 	            alternateDisplay();
-	            
+	            return;
 	            // work finished
 	        }
 	        if (j == 0){
@@ -270,13 +253,13 @@
 	        else{
 	        I = i;
             J = j;
-	        
 	        gDir.load('from: ' + locations[i].Placemark[0].address + ' to: ' + locations[j].Placemark[0].address);
 	        
         }
 	}
 
     	function alternateDisplay(){
+    	    changeMsg("... and Lumos !");
     	    $('#output table').fadeOut( function(){
     	        $('#output table').html("");
 	            var html = "<tr><th>Distances</th>";
@@ -313,11 +296,14 @@
                     else{
                         var val = "-";
                     }
-                    if(val == "1 m"){
-                        val = "0";
+                    if(i == j){
+                        var val = "0 km";
                         }
                     if (i < j){
-                        val = "";
+                        var val = mat[j][i];
+                        if (!val){
+                            val = "-";
+                        }
                     }
                     
                     html += "<td>" + val + "</td>";
@@ -325,6 +311,9 @@
                     }
                     html += "</tr>";
                 }
+                
+                changeMsg(NAME);
+                
 	            $('#output table').html(html);
                 $('#output table').fadeIn();
 	        });
@@ -336,16 +325,19 @@
     	    start(inp);
     	    }
     	
-    	
-
     	</script>
+    	
+    	<script type="text/javascript">var _gaq = _gaq || [];_gaq.push(['_setAccount', 'UA-24545581-1']);_gaq.push(['_setAccount', 'UA-2841380-3']);_gaq.push(['_trackPageview']);(function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);})();</script>
+        
 </head>
 
-<body  onload="initialize()">
+<body onload="initialize()">
+    <div id='g'><g:plusone></g:plusone></div>
+    <div id='facebook'><iframe src="http://www.facebook.com/plugins/like.php?app_id=128323997254991&amp;href=www.sherjilozair.com%2Fwayfarer&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=verdana&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe></div>
     <div id='textandbutton' class='input'>
         
             <div><label id='message' for='input'>
-                    WayFarer
+                    Wayfarer v0.2
                 </label>
             </div>
             <input id='input' 
@@ -353,14 +345,17 @@
                    type='text'
                    value=''
                    onkeypress='if (event.keyCode==13){fare();}'>
-                   <p id='footer'>handcoded by sherjil ozair.</p>
+                   <p id='footer'>spells devised by sherjil ozair</p>
+                   
+                   
     </div>
     
     <div id='output'>
         <table id='table1'>
-            <td>To start, put a list of cities in the text box separated by comma and hit enter.</td>
+            <td>To start, put a list of cities in the text box separated by comma and hit enter. <div><small> v0.2: without the ubiquitous 'Server Busy !' error ;)</small></div></td>
         </table>
     </div>
     <div id='google'><img src='http://quicklytranslate.googlecode.com/svn-history/r14/trunk/resources/icons/google_logo.png'></div>
+    
 </body>
 </html>
