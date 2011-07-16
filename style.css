@@ -1,6 +1,6 @@
 td, th{ border-radius: 5px; text-align: center; padding: 3px;}
 
-th{ background: #36BBCE; color: #015965; font-weight: normal;}
+th{ background: #33CCCC; color: #015965; font-weight: normal;}
 
 #output{
     position: relative;
@@ -18,14 +18,11 @@ th{ background: #36BBCE; color: #015965; font-weight: normal;}
     }
 
 body{
+    overflow-x:hidden;
     color: #015965;
     font-family: "Comic Sans MS", Arial, "MS Trebuchet", sans-serif;
     font-family: 'Redressed', cursive;
     font-size: 125%;
-}
-
-tr:hover_commneted_out{
-    background: #C0C0C0;
 }
 
 table{
@@ -51,7 +48,7 @@ table{
     font-style: italic;
     opacity: 0.4;
     text-align: center;
-    color: red;
+    color: black;
     position: relative;
 }
 
@@ -85,11 +82,11 @@ table{
     z-index: 1;
     position: absolute;
     top: 75px;
-    left: 25px;
+    left: 100px;
 }
 #facebook{
     width: 80px;
     z-index: 1;
     position: absolute;
     top: 75px;
-    right: 20px;}
+    right: 100px;}

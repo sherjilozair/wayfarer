@@ -30,6 +30,12 @@
                 });
             });
             
+            $('small p').hover(function(){
+                $(this).fadeIn();
+            }, function(){
+                $(this).fadeOut();
+            });
+               
         });
 
         var NAME = "Wayfarer v0.2";
@@ -94,7 +100,7 @@
     	            for (i = 0; i < dest.length; i++){
                         var names = dest[i].split(',');
                         
-                        html += "<th>" + names[0];
+                        html += "<th class='r0 c"+ (i+1) +"' >" + names[0];
                         html += "<div class='small'><p>";
                         if (names[1]){
                             html += names[1];
@@ -110,7 +116,7 @@
                     
                     for (i = 0; i < matrix.length; i++){
                         var names = origin[i].split(",");
-                        html += "<tr><th>" + names[0];
+                        html += "<tr><th class=r"+(i+1)+" c0'>" + names[0];
                         html += "<div class='small'><p>";
                         if (names[1]){
                             html += names[1];
@@ -272,7 +278,7 @@
 	            for (i = 0; i < locations.length; i++){
                     var names = locations[i].Placemark[0].address.split(',');
                     
-                    html += "<th>" + names[0];
+                    html += "<th class='r0 c"+ (i+1) +"' >" + names[0];
                     html += "<div class='small'><p>";
                     if (names[1]){
                         html += names[1];
@@ -286,7 +292,7 @@
                 
                 for (i = 0; i < locations.length; i++){
                     var names = locations[i].Placemark[0].address.split(",");
-                    html += "<tr><th>" + names[0];
+                    html += "<tr><th class=r"+(i+1)+" c0'>" + names[0];
                     html += "<div class='small'><p>";
                     if (names[1]){
                         html += names[1];
@@ -312,7 +318,7 @@
                         }
                     }
                     
-                    html += "<td>" + val + "</td>";
+                    html += "<td class='r" + (i+1) + " c" + (j+1) + "'>" + val + "</td>";
                     
                     }
                     html += "</tr>";
